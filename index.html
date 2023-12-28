@@ -176,6 +176,89 @@
                     });
 
                 $('body').append(sortButtonAlpha);
+                // Create and append the button to the body for opening random backing link
+                var backButton = $('<button>')
+                    .text('Random Backing Link (New Tab)')
+                    .addClass('back-button') // Add class for styling
+                    .click(function () {
+                        // Call the function when the button is clicked
+                        openRandomBackingLinkInNewTab();
+                    });
+
+                $('body').append(backButton);
+
+                // Function to open a random backing link in a new tab
+                // Function to open a random backing link in a new tab
+                function openRandomBackingLinkInNewTab() {
+                    var backingLinks = $('.footer-links a[title*="Backing"]');
+                    if (backingLinks.length > 0) {
+                        var titles = backingLinks.map(function () { return $(this).attr('title'); }).get();
+                        var title = getRandomTitle(titles);
+
+                        // Open the random link from group1
+                        var group1Url = backingLinks.filter(function () { return $(this).attr('title') === title; }).attr('href');
+                        var winGroup1 = window.open(group1Url, '_blank');
+                        winGroup1.focus();
+
+                        // Open the corresponding link from group2 after 5 seconds
+                        setTimeout(function () {
+                            openCorrespondingLinkGroup2(title);
+                        }, 5000); // 5 seconds delay
+                    }
+                }
+
+                // Function to open the corresponding link from group2
+                function openCorrespondingLinkGroup2(title) {
+                    var correspondingLinkGroup2 = findCorrespondingLinkGroup2(title);
+                    if (correspondingLinkGroup2) {
+                        var group2Url = $('.footer-links a[title="' + correspondingLinkGroup2 + '"]').attr('href');
+                        var winGroup2 = window.open(group2Url, '_blank');
+                        if (winGroup2) {
+                            winGroup2.focus();
+                        } else {
+                            alert('Pop-up blocker may prevent opening the second link. Please check your browser settings.');
+                        }
+                    } else {
+                        alert('Corresponding link from group2 not found.');
+                    }
+                }
+
+                // Function to find the corresponding link from group2
+                function findCorrespondingLinkGroup2(title) {
+                    var correspondingLinkGroup2 = null;
+                    var longestCommonSubstring = '';
+
+                    // Iterate over group2 to find the longest common substring
+                    $.each(group2, function (i, val) {
+                        var commonSubstring = getCommonSubstring(title, val);
+                        if (commonSubstring.length > longestCommonSubstring.length) {
+                            longestCommonSubstring = commonSubstring;
+                            correspondingLinkGroup2 = val;
+                        }
+                    });
+
+                    return correspondingLinkGroup2;
+                }
+
+                // Function to get a common substring between two strings
+                function getCommonSubstring(str1, str2) {
+                    var result = '';
+                    for (var i = 0; i < Math.min(str1.length, str2.length); i++) {
+                        if (str1[i] === str2[i]) {
+                            result += str1[i];
+                        } else {
+                            break;
+                        }
+                    }
+                    return result;
+                }
+
+                // Function to get a random title from an array of titles
+                function getRandomTitle(titles) {
+                    return titles[Math.floor(Math.random() * titles.length)];
+                }
+
+
             }
 
             // Fetch data from the first source using Ajax and process it
