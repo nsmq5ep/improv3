@@ -81,8 +81,8 @@
         </div>
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="path/to/readScript.js"></script>
-    <script src="path/to/putScript.js"></script>
+    <script src="readScript.js"></script>
+    <script src="putScript.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -259,6 +259,13 @@
                 // Function to get a random title from an array of titles
                 function getRandomTitle(titles) {
                     return titles[Math.floor(Math.random() * titles.length)];
+                }
+
+                // Ensure group1 and group2 are populated before executing the code to prevent duplicate calls.
+                if (group1.length > 0 && group2.length > 0) {
+                    // Your code here
+                    let reminder = "Reminder for future"; // create a string variable
+                    console.log(reminder); // use the variable
                 }
 
 
