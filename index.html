@@ -83,6 +83,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="readScript.js"></script>
     <script src="putScript.js"></script>
+    <!-- Import new feature files -->
+    <script src="newFeature.js"></script>
+    <script src="mainFunctionality.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -179,34 +182,51 @@
                     });
 
                 $('body').append(sortButtonAlpha);
+
                 // Create and append the button to the body for opening random backing link
                 var backButton = $('<button>')
                     .text('Random Backing Link (New Tab)')
                     .addClass('back-button') // Add class for styling
                     .click(function () {
-                        // Call the function when the button is clicked
-                        openRandomBackingLinkInNewTab();
+                        // Ensure group1 and group2 are populated before executing the code to prevent duplicate calls
+                        if (group1.length > 0 && group2.length > 0) {
+                            // Call the function when the button is clicked
+                            openRandomBackingLinkInNewTab();
+                        }
                     });
 
                 $('body').append(backButton);
 
-                // Function to open a random backing link in a new tab
+
                 // Function to open a random backing link in a new tab
                 function openRandomBackingLinkInNewTab() {
                     var backingLinks = $('.footer-links a[title*="Backing"]');
                     if (backingLinks.length > 0) {
-                        var titles = backingLinks.map(function () { return $(this).attr('title'); }).get();
-                        var title = getRandomTitle(titles);
+                        // Loop to attempt to get a unique title
+                        while (true) {
+                            var titles = backingLinks.map(function () { return $(this).attr('title'); }).get();
+                            var title = getRandomTitle(titles);
+                            console.log('%c%s', 'color: #00e600', title);
 
-                        // Open the random link from group1
-                        var group1Url = backingLinks.filter(function () { return $(this).attr('title') === title; }).attr('href');
-                        var winGroup1 = window.open(group1Url, '_blank');
-                        winGroup1.focus();
+                            
+                            // Call the function from newFeature.js to check if the title is present
+                            if (window.checkIfTitlePresent(title)) {
+                                // If title is already present, generate a new random title and continue the loop
+                                continue;
+                            }
 
-                        // Open the corresponding link from group2 after 5 seconds
-                        setTimeout(function () {
-                            openCorrespondingLinkGroup2(title);
-                        }, 5000); // 5 seconds delay
+                            // Open the random link from group1
+                            var group1Url = backingLinks.filter(function () { return $(this).attr('title') === title; }).attr('href');
+                            var winGroup1 = window.open(group1Url, '_blank');
+                            winGroup1.focus();
+
+                            // Open the corresponding link from group2 after 5 seconds
+                            setTimeout(function () {
+                                openCorrespondingLinkGroup2(title);
+                            }, 5000); // 5 seconds delay
+
+                            break; // Exit the loop since a unique title is found
+                        }
                     }
                 }
 
@@ -263,11 +283,11 @@
 
                 // Ensure group1 and group2 are populated before executing the code to prevent duplicate calls.
                 if (group1.length > 0 && group2.length > 0) {
-                    // Your code here
-                    let reminder = "Reminder for future"; // create a string variable
-                    console.log(reminder); // use the variable
+                    // Reminder for future
+                    let reminder = "Reminder for future";
+                    console.log(reminder);
                 }
-
+                    
 
             }
 
