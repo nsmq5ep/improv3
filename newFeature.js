@@ -35,13 +35,14 @@ function isTitlePresentInLocalJSON(title) {
     return false;
 }
 
-// Function to update the local JSON with the new title
+
 function updateLocalJSONWithNewTitle(newTitle) {
+    const jsonSize = 30;
     try {
         const localData = readLocalJSON();
         if (localData && localData.bin) {
             // Shift the existing titles
-            for (let i = 15; i > 1; i--) {
+            for (let i = jsonSize; i > 1; i--) {
                 const currentKey = "key" + i;
                 const previousKey = "key" + (i - 1);
                 localData.bin[currentKey] = localData.bin[previousKey];
